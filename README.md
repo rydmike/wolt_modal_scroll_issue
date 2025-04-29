@@ -1,2 +1,5 @@
 # wolt_modal_scroll_issue
-Test app for wolt modal scroll issue
+
+A test app to reproduce a scroll issue with Wolt's modal package.
+
+https://github.com/woltapp/wolt_modal_sheet/issues/374
