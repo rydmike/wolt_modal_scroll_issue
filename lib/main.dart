@@ -70,19 +70,21 @@ class MyHomePage extends StatelessWidget {
       ),
       isTopBarLayerAlwaysVisible: true, // Keep title visible when scrolling
       // Main content is the scrollable list
-      child: Column(
-        children: [
-          SizedBox(height: 20),
-          FilledButton(
-            onPressed: () {
-              WoltModalSheet.of(context).showNext();
-            },
-            child: Text('Next sheet'),
-          ),
-          SizedBox(height: 20),
-          FilledButton(onPressed: () {}, child: Text('Dummy button')),
-          SizedBox(height: 20),
-        ],
+      child: Center(
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            FilledButton(
+              onPressed: () {
+                WoltModalSheet.of(context).showNext();
+              },
+              child: Text('Next sheet'),
+            ),
+            SizedBox(height: 20),
+            FilledButton(onPressed: () {}, child: Text('Dummy button')),
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
 
