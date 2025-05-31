@@ -37,7 +37,7 @@ class MyHomePage extends StatelessWidget {
               pageListBuilder: (modalSheetContext) {
                 return [
                   _buildPage1(modalSheetContext),
-                  _buildPage2(modalSheetContext),
+                  // _buildPage2(modalSheetContext),
                 ];
               },
               modalTypeBuilder: (context) {
@@ -58,8 +58,9 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  SliverWoltModalSheetPage _buildPage1(BuildContext context) {
+  SliverWoltModalSheetPage _buildPage1(BuildContext sheetContext) {
     final WoltModalSheetPage page = WoltModalSheetPage(
+      // resizeToAvoidBottomInset: false,
       hasSabGradient: false, // Remove default gradient overlay
       topBarTitle: const Padding(
         padding: EdgeInsets.all(16.0),
@@ -70,21 +71,42 @@ class MyHomePage extends StatelessWidget {
       ),
       isTopBarLayerAlwaysVisible: true, // Keep title visible when scrolling
       // Main content is the scrollable list
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            FilledButton(
-              onPressed: () {
-                WoltModalSheet.of(context).showNext();
-              },
-              child: Text('Next sheet'),
+      child: Builder(
+        builder: (context) {
+          final bool noKeyboardShown =
+              MediaQuery.viewInsetsOf(context).bottom == 0;
+          return Center(
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                FilledButton(
+                  onPressed: () {
+                    WoltModalSheet.of(
+                      sheetContext,
+                    ).addPage(_buildPage2(sheetContext));
+
+                    WoltModalSheet.of(context).showNext();
+                  },
+                  child: Text('Next sheet'),
+                ),
+                SizedBox(height: 20),
+                if (noKeyboardShown)
+                  FilledButton(onPressed: () {}, child: Text('Dummy button')),
+                if (noKeyboardShown) SizedBox(height: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Input',
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
             ),
-            SizedBox(height: 20),
-            FilledButton(onPressed: () {}, child: Text('Dummy button')),
-            SizedBox(height: 20),
-          ],
-        ),
+          );
+        },
       ),
     );
 
@@ -97,7 +119,8 @@ class MyHomePage extends StatelessWidget {
       leadingNavBarWidget: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          WoltModalSheet.of(context).showPrevious();
+          // WoltModalSheet.of(context).showPrevious();
+          WoltModalSheet.of(context).popPage();
         },
       ),
       topBarTitle: const Padding(
@@ -109,24 +132,41 @@ class MyHomePage extends StatelessWidget {
       ),
       isTopBarLayerAlwaysVisible: true, // Keep title visible when scrolling
       // Main content is the scrollable list
-      child: Column(
-        children: [
-          SizedBox(height: 20),
-          FilledButton(onPressed: () {}, child: Text('Dummy button')),
-          SizedBox(height: 20),
-          ListView.builder(
-            physics: const ClampingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: 50,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text('Scrolling content ${index + 1}'),
-                leading: CircleAvatar(child: Text('${index + 1}')),
-              );
-            },
-          ),
-          SizedBox(height: 20),
-        ],
+      child: Builder(
+        builder: (context) {
+          final bool noKeyboardShown =
+              MediaQuery.viewInsetsOf(context).bottom == 0;
+          return Column(
+            children: [
+              SizedBox(height: 20),
+              if (noKeyboardShown)
+                FilledButton(onPressed: () {}, child: Text('Dummy button')),
+              if (noKeyboardShown) SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Input',
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              ListView.builder(
+                physics: const ClampingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 50,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text('Scrolling content ${index + 1}'),
+                    leading: CircleAvatar(child: Text('${index + 1}')),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+            ],
+          );
+        },
       ),
     );
 
